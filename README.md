@@ -1,7 +1,11 @@
 # MemberLink Automation System
 ### Computer-Use Automation — Record Once, Replay Deterministically
 
-A production-grade "Record Once → Replay Deterministically" engine that automates legacy banking UIs lacking modern APIs. Users type natural language into a chat interface; the system drives a legacy banking app and returns structured results — with full Human-in-the-Loop (HITL) escalation when automation gets stuck.
+A prototype for reliable computer-use automation in legacy banking-style applications that lack modern APIs.
+
+Users submit natural-language requests through a chat interface. An LLM-powered discovery agent can explore a workflow and produce a reusable capability artifact; a deterministic Playwright engine then executes supported workflows without an LLM call during replay. When automation gets stuck, a Human-in-the-Loop (HITL) flow allows intervention and recovery.
+
+The included banking application is simulated and uses an in-memory data store. This project is an engineering prototype, suitable for banking integration.
 
 ---
 
@@ -42,7 +46,7 @@ Both are exercised via a natural-language chat UI at `http://localhost:5000`.
 
 ```
 
-interface-ai/
+AI-Banking-Automation/
 ├── requirements.txt
 ├── README.md
 ├── REPORT.md
@@ -93,13 +97,7 @@ evidence/                          ← All run evidence (auto-generated)
 ├── replay_run.log                 ← Per-run replay traces 
 ├── screenshots/                   ← Browser screenshots (annotated on failure)
 └── interventions/                 ← HITL escalation records
-
-
-<!-- These files were made and captured in first phase/design (later design changed to above) -->
-└── test-screenshots-initial-build
-└── screenshots while testing
-└── interventions-initial-build
-└── dashboard.html
+└── dashboard.html                 ← Easy Visualization
 
 ````
 
@@ -117,8 +115,8 @@ evidence/                          ← All run evidence (auto-generated)
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/SG17THEProgrammer/Interface-AI-Banking-Automation.git
-cd interface-ai
+git clone https://github.com/SG17THEProgrammer/AI-Banking-Automation.git
+cd AI-Banking-Automation
 
 # 2. Create and activate a virtual environment
 python -m venv venv
