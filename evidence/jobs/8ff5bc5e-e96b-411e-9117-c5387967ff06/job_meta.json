@@ -1,0 +1,18 @@
+{
+  "status": "done",
+  "outcome": "success",
+  "success": true,
+  "outputs": {
+    "balance": null,
+    "account_status": null,
+    "member_name": null
+  },
+  "business_outcome": null,
+  "error": null,
+  "duration": 63.73,
+  "steps": 2,
+  "capability": "check_member_balance",
+  "reply": "\u2705 **member 100001** \u2014 ",
+  "job_dir": "C:\\Documents\\vs code\\Interface AI\\interface-ai\\src\\..\\evidence\\jobs\\8ff5bc5e-e96b-411e-9117-c5387967ff06",
+  "_reconstructed": true
+}

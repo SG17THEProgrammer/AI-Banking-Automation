@@ -934,8 +934,14 @@ width: 100%;} */
             const main = document.getElementById('main');
             main.innerHTML = '';
 
+            // ── Two-column top: job header (left) + outputs (right) ───────────────
+
             // ── Job header card ────────────────────────────────────────────────────
+            const topRow = el('div');
+            topRow.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;align-items:start';
+
             const hdr = el('div', 'job-header');
+            hdr.style.marginBottom = '0';
             hdr.innerHTML = `
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;width:100%">
       <span class="job-badge ${outcomeClass}">${outcomeLabel(d.outcome)}</span>
@@ -944,20 +950,30 @@ width: 100%;} */
       <span style="font-size:11px;color:var(--muted)"><b style="color:var(--text)">Steps:</b> ${d.steps}</span>
     </div>
     <div style="margin-top:10px;font-size:13px;border-left:3px solid var(--accent);padding-left:10px">${md(d.reply || '')}</div>`;
-            main.appendChild(hdr);
+            topRow.appendChild(hdr);
 
-            // ── Outputs ────────────────────────────────────────────────────────────
+            // Outputs panel (right side)
+            const outPanel = el('div');
+            outPanel.style.cssText = 'background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:14px';
             if (d.outputs && Object.keys(d.outputs).length) {
-                main.appendChild(sectionHeader('Extracted Outputs'));
+                const outTitle = el('div');
+                outTitle.style.cssText = 'font-size:10px;font-weight:600;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;margin-bottom:10px';
+                outTitle.textContent = 'Extracted Outputs';
+                outPanel.appendChild(outTitle);
                 const grid = el('div', 'outputs-grid');
+                grid.style.marginBottom = '0';
                 for (const [k, v] of Object.entries(d.outputs)) {
                     const item = el('div', 'out-item');
                     item.innerHTML = `<div class="out-key">${h(k.replace(/_/g, ' '))}</div>
         <div class="out-val">${h(String(v ?? '—'))}</div>`;
                     grid.appendChild(item);
                 }
-                main.appendChild(grid);
+                outPanel.appendChild(grid);
+            } else {
+                outPanel.innerHTML = '<div style="color:var(--muted);font-size:12px;padding:8px 0">No outputs extracted.</div>';
             }
+            topRow.appendChild(outPanel);
+            main.appendChild(topRow);
 
             // ── Step timeline ──────────────────────────────────────────────────────
             main.appendChild(sectionHeader('Step Timeline'));
@@ -1146,13 +1162,14 @@ width: 100%;} */
 
             steps.forEach(s => {
                 const row = el('div', 'tl-row');
+                const rowId = `tl-desc-${s.id}`;
                 row.innerHTML = `
       <span class="tl-step">${h(s.id)}</span>
       <span><span class="ab ab-${s.action}">${h(s.action)}</span></span>
       <div class="tl-bar-wrap"><div class="tl-bar" style="width:${Math.max(1, s.dur / maxD * 100)}%;background:${barColor(s)};opacity:.8"></div></div>
       <span class="tl-dur">${s.dur > 0 ? s.dur + 'ms' : '—'}</span>
       <span><span class="tag ${s.success ? 's' : 'd'}">${s.success ? 'ok' : 'failed'}</span></span>
-      <span class="tl-desc" title="${h(s.desc)}">${h(s.desc)}</span>`;
+      <span class="tl-desc" id="${rowId}" style="cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px" title="Click to expand" onclick="this.style.whiteSpace=this.style.whiteSpace==='normal'?'nowrap':'normal';this.style.overflow=this.style.overflow==='visible'?'hidden':'visible';this.style.textOverflow=this.style.textOverflow==='clip'?'ellipsis':'clip'">${h(s.desc)}</span>`;
                 tl.appendChild(row);
             });
 
@@ -1359,9 +1376,18 @@ width: 100%;} */
             document.querySelectorAll('.filt').forEach(b => b.classList.remove('on'));
             btn.classList.add('on');
             const f = btn.dataset.f;
+            let visible = 0;
             document.querySelectorAll('.log-scroll .log-row').forEach(r => {
-                r.style.display = (f === 'all' || r.dataset.cat === f) ? '' : 'none';
+                const show = f === 'all' || r.dataset.cat === f;
+                r.style.display = show ? '' : 'none';
+                if (show) visible++;
             });
+            // Update the event count label
+            const countEl = btn.closest('.log-card')?.querySelector('.log-toolbar span[style*="margin-left"]');
+            if (countEl) {
+                const total = document.querySelectorAll('.log-scroll .log-row').length;
+                countEl.textContent = f === 'all' ? `${total} events` : `${visible} / ${total} events`;
+            }
         }
 
         function openLB(src, cap) {

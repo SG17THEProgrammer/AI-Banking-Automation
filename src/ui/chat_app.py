@@ -34,7 +34,226 @@ BANKING_URL = "http://localhost:8080"
 
 _jobs: dict[str, dict] = {}
 _lock = threading.Lock()
-# _hitl_events: dict[str, threading.Event] = {}  # job_id → resume event
+
+
+def _save_job_meta(job_id: str, job: dict):
+    """Persist completed job metadata so it survives server restarts."""
+    try:
+        job_dir = os.path.join(JOBS_DIR, job_id)
+        os.makedirs(job_dir, exist_ok=True)
+        meta = {k: v for k, v in job.items() if k != "log_entries"}
+        with open(os.path.join(job_dir, "job_meta.json"), "w") as f:
+            json.dump(meta, f, indent=2)
+    except Exception as e:
+        logger.warning(f"[chat] Could not save job meta for {job_id}: {e}")
+
+
+def _load_job_from_disk(job_id: str):
+    """
+    Load job metadata from disk.
+    1. Try job_meta.json (written by new code going forward).
+    2. Fall back to reconstructing from replay_run.log (old job folders).
+    3. Save job_meta.json so the next request is instant.
+    """
+    job_dir = os.path.join(JOBS_DIR, job_id)
+    if not os.path.isdir(job_dir):
+        return None
+
+    # Fast path — already have persisted meta
+    meta_path = os.path.join(job_dir, "job_meta.json")
+    if os.path.exists(meta_path):
+        try:
+            with open(meta_path) as f:
+                return json.load(f)
+        except Exception:
+            pass  # corrupted — fall through and rebuild
+
+    # Slow path — reconstruct from replay_run.log
+    log_path = os.path.join(job_dir, "replay_run.log")
+    if not os.path.exists(log_path):
+        return None
+
+    try:
+        entries = []
+        with open(log_path) as f:
+            for line in f:
+                line = line.strip()
+                if line:
+                    try:
+                        entries.append(json.loads(line))
+                    except Exception:
+                        pass
+
+        if not entries:
+            return None
+
+        # Pull key events
+        start_ev   = next((e for e in entries if e.get("event") == "replay_start"), {})
+        done_ev    = next((e for e in entries if e.get("event") == "replay_complete"), None)
+        bo_ev      = next((e for e in entries if e.get("event") == "business_outcome_detected"), None)
+        fail_ev    = next((e for e in entries if e.get("event") == "replay_error"), None)
+
+        capability = start_ev.get("capability", "check_member_balance")
+        params     = start_ev.get("params", {})
+
+        # Derive timing
+        def _ts(e):
+            t = e.get("ts") or e.get("timestamp", "")
+            try:
+                from datetime import datetime, timezone
+                return datetime.fromisoformat(t.replace("Z", "+00:00"))
+            except Exception:
+                return None
+
+        t_start = _ts(entries[0])
+        t_end   = _ts(entries[-1])
+        duration = round((t_end - t_start).total_seconds(), 2) if t_start and t_end else 0
+
+        steps_completed = sum(1 for e in entries if e.get("event") == "step_done"
+                              and e.get("result", {}).get("success"))
+
+        # Determine outcome
+        if done_ev:
+            outcome  = "success"
+            outputs  = done_ev.get("outputs", {})
+            success  = True
+            error    = None
+            bo_msg   = None
+        elif bo_ev:
+            outcome  = "business_outcome"
+            outputs  = {}
+            success  = False
+            error    = None
+            bo_msg   = bo_ev.get("outcome", "")
+        else:
+            outcome  = "hard_failure"
+            outputs  = {}
+            success  = False
+            error    = (fail_ev or {}).get("error", "Unknown error")
+            bo_msg   = None
+
+        # Build a reply string
+        member_id = params.get("member_id", "")
+        if outcome == "success":
+            name    = outputs.get("member_name") or outputs.get("updated_status") or f"member {member_id}"
+            balance = outputs.get("balance")
+            status  = outputs.get("account_status") or outputs.get("updated_status", "")
+            if balance is not None:
+                bal_str = f"${float(balance):,.2f}" if balance else "—"
+                reply = f"✅ **{name}**\n• Balance: **{bal_str}**\n• Status: **{status}**"
+            else:
+                reply = f"✅ **{name}** — {status}"
+        elif outcome == "business_outcome":
+            reply = f"⚑ {bo_msg}"
+        else:
+            reply = f"❌ Hard failure: {error or 'unknown'}"
+
+        meta = {
+            "status":            "done",
+            "outcome":           outcome,
+            "success":           success,
+            "outputs":           outputs,
+            "business_outcome":  bo_msg,
+            "error":             error,
+            "duration":          duration,
+            "steps":             steps_completed,
+            "capability":        capability,
+            "reply":             reply,
+            "job_dir":           job_dir,
+            "_reconstructed":    True,   # flag so you know it was rebuilt
+        }
+
+        # Cache it so next load is instant
+        try:
+            with open(meta_path, "w") as f:
+                json.dump(meta, f, indent=2)
+        except Exception:
+            pass
+
+        return meta
+
+    except Exception as e:
+        logger.warning(f"[chat] Could not reconstruct meta for {job_id}: {e}")
+        return None
+
+def _run_hitl_demo(job_id: str):
+    """Run check_balance with deliberately broken locators to trigger HITL from chat."""
+    from artifact import Step, Locator
+    import capabilities.check_balance as cap_check_balance
+
+    job_dir = os.path.join(JOBS_DIR, job_id)
+    os.makedirs(job_dir, exist_ok=True)
+
+    try:
+        hitl_bridge.register_job(job_id)
+
+        def _on_step(step_id, action, description):
+            with _lock:
+                if job_id in _jobs:
+                    _jobs[job_id]["live_step"] = {"step_id": step_id, "action": action, "description": description}
+
+        def _on_step_failed(step_id, error):
+            with _lock:
+                if job_id in _jobs:
+                    _jobs[job_id]["live_failed_step"] = step_id
+                    _jobs[job_id]["live_step"] = {"step_id": step_id, "action": "failed", "description": error[:120]}
+
+        artifact = cap_check_balance.build("http://localhost:8080")
+        # Break the click-search step locators to force HITL
+        for i, step in enumerate(artifact.steps):
+            if step.action == "click" and "search" in step.step_id.lower():
+                artifact.steps[i] = Step(
+                    step_id=step.step_id,
+                    action="click",
+                    locators=[
+                        Locator("css",        "button.__hitl_demo_broken__",  "Broken — triggers HITL"),
+                        Locator("aria-label", "__hitl_demo_broken_fallback__","Broken fallback"),
+                    ],
+                    description=step.description + " [HITL DEMO — locators intentionally broken]",
+                    checkpoint=step.checkpoint,
+                    wait_after_ms=300,
+                    is_reversible=step.is_reversible,
+                )
+                break
+
+        engine = ReplayEngine(
+            evidence_dir=EVIDENCE_DIR,
+            headless=True,
+            max_retries_per_step=1,
+            hitl_enabled=True,
+        )
+        result = engine.run(
+            artifact=artifact,
+            parameters={"member_id": "100001"},
+            log_suffix="run",
+            non_interactive=False,
+            job_dir=job_dir,
+            hitl_job_id=job_id,
+            on_step_start=_on_step,
+            on_step_failed=_on_step_failed,
+        )
+        with _lock:
+            _jobs[job_id] = {
+                "status":      "done",
+                "outcome":     result.outcome_type,
+                "success":     result.success,
+                "outputs":     result.outputs,
+                "error":       result.error,
+                "duration":    round(result.duration_seconds, 2),
+                "steps":       result.steps_completed,
+                "reply":       _format_reply("check_member_balance", result, {"member_id": "100001"}, "Alice Johnson (HITL DEMO)"),
+                "log_entries": result.log_entries,
+                "job_dir":     job_dir,
+            }
+        _save_job_meta(job_id, _jobs[job_id])
+        hitl_bridge.cleanup(job_id)
+
+    except Exception as e:
+        logger.exception(f"[chat] HITL demo job {job_id} failed")
+        with _lock:
+            _jobs[job_id] = {"status": "done", "outcome": "hard_failure", "success": False,
+                             "error": str(e), "reply": f"❌ HITL demo error: {e}", "log_entries": [], "job_dir": job_dir}
+        _save_job_meta(job_id, _jobs[job_id])
 
 
 # ── Suppress /health and /api/health-proxy from Werkzeug access log ────────
@@ -77,6 +296,24 @@ def dashboard():
 def chat():
     data = request.get_json(force=True)
     message = (data.get("message") or "").strip()
+        # HITL demo: user types "test hitl" or "simulate hitl" to trigger a real escalation
+    hitl_trigger_phrases = ["test hitl", "simulate hitl", "demo hitl", "trigger hitl", "hitl demo"]
+    if any(p in message.lower() for p in hitl_trigger_phrases):
+        job_id = str(uuid.uuid4())
+        with _lock:
+            _jobs[job_id] = {"status": "running", "capability": "check_member_balance", "started": time.time()}
+        threading.Thread(
+            target=_run_hitl_demo,
+            args=(job_id,),
+            daemon=True,
+        ).start()
+        return jsonify({
+            "job_id":        job_id,
+            "type":          "accepted",
+            "capability":    "check_member_balance",
+            "parameters":    {"member_id": "100001"},
+            "subject_label": "Alice Johnson (ID 100001) [HITL DEMO]",
+        })
     if not message:
         return jsonify({"error": "empty message"}), 400
 
@@ -144,6 +381,8 @@ def job_status(job_id: str):
     with _lock:
         job = _jobs.get(job_id)
     if not job:
+        job = _load_job_from_disk(job_id)
+    if not job:
         return jsonify({"error": "unknown job"}), 404
     
     # Inject live HITL context if waiting
@@ -170,6 +409,8 @@ def job_details(job_id: str):
     with _lock:
         job = dict(_jobs.get(job_id, {}))
     if not job:
+        job = _load_job_from_disk(job_id) or {}
+    if not job:
         return jsonify({"error": "unknown job"}), 404
 
     job_dir = os.path.join(JOBS_DIR, job_id)
@@ -177,18 +418,36 @@ def job_details(job_id: str):
     # ── Log entries ───────────────────────────────────────────────────────
     log_entries = job.get("log_entries", [])
     if not log_entries:
-        # Try reading from disk if not in memory
-        log_path = os.path.join(job_dir, "replay.log")
-        if os.path.exists(log_path):
-            log_entries = []
-            with open(log_path) as f:
-                for line in f:
-                    line = line.strip()
-                    if line:
-                        try:
-                            log_entries.append(json.loads(line))
-                        except Exception:
-                            pass
+        # Try all known log filename patterns
+        candidate_logs = [
+            os.path.join(job_dir, "replay_run.log"),
+            os.path.join(job_dir, "replay.log"),
+            os.path.join(job_dir, "replay_success.log"),
+            os.path.join(job_dir, "replay_hitl_test.log"),
+        ]
+        # Also pick up any .log file in the job dir as a last resort
+        try:
+            for fname in os.listdir(job_dir):
+                if fname.endswith(".log"):
+                    p = os.path.join(job_dir, fname)
+                    if p not in candidate_logs:
+                        candidate_logs.append(p)
+        except Exception:
+            pass
+
+        for log_path in candidate_logs:
+            if os.path.exists(log_path):
+                log_entries = []
+                with open(log_path) as f:
+                    for line in f:
+                        line = line.strip()
+                        if line:
+                            try:
+                                log_entries.append(json.loads(line))
+                            except Exception:
+                                pass
+                if log_entries:
+                    break  # found a non-empty log, stop looking
 
     # ── Screenshots as base64 ─────────────────────────────────────────────
     screenshots = []
@@ -349,6 +608,8 @@ def _run(job_id: str, cap, subject_label: str):
             # Clean up the resume event
             hitl_bridge.cleanup(job_id)
 
+        _save_job_meta(job_id, _jobs[job_id])
+
     except Exception as e:
         logger.exception(f"[chat] Job {job_id} failed")
         with _lock:
@@ -361,6 +622,8 @@ def _run(job_id: str, cap, subject_label: str):
                 "log_entries": [],
                 "job_dir": job_dir,
             }
+
+        _save_job_meta(job_id, _jobs[job_id])
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────

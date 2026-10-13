@@ -1,0 +1,17 @@
+{
+  "status": "done",
+  "outcome": "success",
+  "success": true,
+  "outputs": {
+    "updated_status": "Active",
+    "member_name": "Carol Williams"
+  },
+  "business_outcome": null,
+  "error": null,
+  "duration": 7.3,
+  "steps": 6,
+  "capability": "update_account_status",
+  "reply": "\u2705 **Carol Williams** \u2014 Active",
+  "job_dir": "C:\\Documents\\vs code\\Interface AI\\interface-ai\\src\\..\\evidence\\jobs\\4d014151-ef5b-401d-9982-19046712c5d0",
+  "_reconstructed": true
+}

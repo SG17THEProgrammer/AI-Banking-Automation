@@ -1362,3 +1362,118 @@ Call log:
 2026-09-19 15:26:53,308  INFO     werkzeug — 127.0.0.1 - - [19/Sep/2026 15:26:53] "POST /api/job/fae09630-9306-4f76-91b1-75f24a0af7fb/resolve HTTP/1.1" 200 -
 2026-09-19 15:26:53,661  INFO     werkzeug — 127.0.0.1 - - [19/Sep/2026 15:26:53] "GET /member/100001 HTTP/1.1" 200 -
 2026-09-19 15:27:09,765  INFO     werkzeug — 127.0.0.1 - - [19/Sep/2026 15:27:09] "GET /dashboard?job=fae09630-9306-4f76-91b1-75f24a0af7fb HTTP/1.1" 200 -
+2026-10-12 18:06:04,782  INFO     werkzeug — WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.1.2:8080
+2026-10-12 18:06:04,783  INFO     werkzeug — Press CTRL+C to quit
+2026-10-12 18:06:05,996  INFO     werkzeug — WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.2:5000
+2026-10-12 18:06:05,998  INFO     werkzeug — Press CTRL+C to quit
+2026-10-12 18:06:08,296  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 18:06:08] "GET / HTTP/1.1" 200 -
+2026-10-12 18:06:09,718  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 18:06:09] "GET /favicon.ico HTTP/1.1" 404 -
+2026-10-12 18:06:30,469  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 18:06:30] "GET / HTTP/1.1" 302 -
+2026-10-12 18:06:30,511  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 18:06:30] "GET /search HTTP/1.1" 200 -
+2026-10-12 18:06:30,875  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 18:06:30] "GET /favicon.ico HTTP/1.1" 404 -
+2026-10-12 18:31:19,597  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 18:31:19] "GET /api/member/100003 HTTP/1.1" 200 -
+2026-10-12 18:31:19,603  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 18:31:19] "POST /api/chat HTTP/1.1" 200 -
+2026-10-12 18:31:26,658  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 18:31:26] "GET /search HTTP/1.1" 200 -
+2026-10-12 18:31:28,192  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 18:31:28] "POST /search HTTP/1.1" 302 -
+2026-10-12 18:31:28,535  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 18:31:28] "GET /member/100003 HTTP/1.1" 200 -
+2026-10-12 18:32:01,955  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 18:32:01] "GET /dashboard?job=83f856a9-3513-43dd-91f8-1a01d1f21b37 HTTP/1.1" 200 -
+2026-10-12 19:04:49,339  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 19:04:49] "GET /dashboard?job=1c79c9c5-483f-45f6-95eb-901db5026e6f HTTP/1.1" 200 -
+2026-10-12 19:04:49,605  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 19:04:49] "GET /api/job/1c79c9c5-483f-45f6-95eb-901db5026e6f/details HTTP/1.1" 404 -
+2026-10-12 19:05:14,383  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 19:05:14] "GET /dashboard?job=4d014151-ef5b-401d-9982-19046712c5d0 HTTP/1.1" 200 -
+2026-10-12 19:05:14,808  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 19:05:14] "GET /api/job/4d014151-ef5b-401d-9982-19046712c5d0/details HTTP/1.1" 404 -
+2026-10-12 19:05:28,710  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 19:05:28] "GET /dashboard?job=8ff5bc5e-e96b-411e-9117-c5387967ff06 HTTP/1.1" 200 -
+2026-10-12 19:05:28,942  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 19:05:28] "GET /api/job/8ff5bc5e-e96b-411e-9117-c5387967ff06/details HTTP/1.1" 404 -
+2026-10-12 19:05:44,740  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 19:05:44] "GET /dashboard?job=f601848e-1ad5-481b-818f-f98dcfbd4f38 HTTP/1.1" 200 -
+2026-10-12 19:05:44,990  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 19:05:44] "GET /api/job/f601848e-1ad5-481b-818f-f98dcfbd4f38/details HTTP/1.1" 404 -
+2026-10-12 19:06:02,513  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 19:06:02] "GET /dashboard?job=83f856a9-3513-43dd-91f8-1a01d1f21b37 HTTP/1.1" 200 -
+2026-10-12 19:07:19,102  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 19:07:19] "GET /dashboard?job=83f856a9-3513-43dd-91f8-1a01d1f21b37/details HTTP/1.1" 200 -
+2026-10-12 19:07:19,506  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 19:07:19] "GET /api/job/83f856a9-3513-43dd-91f8-1a01d1f21b37/details/details HTTP/1.1" 404 -
+2026-10-12 19:08:20,606  INFO     werkzeug — 127.0.0.1 - - [12/Oct/2026 19:08:20] "GET /dashboard?job=83f856a9-3513-43dd-91f8-1a01d1f21b37 HTTP/1.1" 200 -
+2026-10-13 00:48:36,012  INFO     werkzeug — WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.1.2:8080
+2026-10-13 00:48:36,014  INFO     werkzeug — Press CTRL+C to quit
+2026-10-13 00:48:36,628  INFO     werkzeug — WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.2:5000
+2026-10-13 00:48:36,628  INFO     werkzeug — Press CTRL+C to quit
+2026-10-13 00:48:39,489  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 00:48:39] "GET / HTTP/1.1" 200 -
+2026-10-13 00:49:29,652  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 00:49:29] "GET / HTTP/1.1" 200 -
+2026-10-13 00:50:31,123  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 00:50:31] "GET /dashboard?job=83f856a9-3513-43dd-91f8-1a01d1f21b37 HTTP/1.1" 200 -
+2026-10-13 00:50:31,463  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 00:50:31] "GET /api/job/83f856a9-3513-43dd-91f8-1a01d1f21b37/details HTTP/1.1" 404 -
+2026-10-13 00:50:39,128  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 00:50:39] "GET /dashboard?job=83f856a9-3513-43dd-91f8-1a01d1f21b37 HTTP/1.1" 200 -
+2026-10-13 00:50:39,343  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 00:50:39] "GET /api/job/83f856a9-3513-43dd-91f8-1a01d1f21b37/details HTTP/1.1" 404 -
+2026-10-13 00:50:53,715  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 00:50:53] "GET / HTTP/1.1" 200 -
+2026-10-13 00:51:44,695  INFO     werkzeug — WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.1.2:8080
+2026-10-13 00:51:44,695  INFO     werkzeug — Press CTRL+C to quit
+2026-10-13 00:51:46,122  INFO     werkzeug — WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.2:5000
+2026-10-13 00:51:46,122  INFO     werkzeug — Press CTRL+C to quit
+2026-10-13 00:51:48,406  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 00:51:48] "GET / HTTP/1.1" 200 -
+2026-10-13 00:52:38,435  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 00:52:38] "GET /dashboard?job=83f856a9-3513-43dd-91f8-1a01d1f21b37 HTTP/1.1" 200 -
+2026-10-13 00:52:38,723  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 00:52:38] "GET /api/job/83f856a9-3513-43dd-91f8-1a01d1f21b37/details HTTP/1.1" 404 -
+2026-10-13 00:52:48,164  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 00:52:48] "GET / HTTP/1.1" 200 -
+2026-10-13 00:53:30,728  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 00:53:30] "GET / HTTP/1.1" 200 -
+2026-10-13 00:53:38,154  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 00:53:38] "GET / HTTP/1.1" 200 -
+2026-10-13 00:54:10,569  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 00:54:10] "GET /dashboard?job=83f856a9-3513-43dd-91f8-1a01d1f21b37 HTTP/1.1" 200 -
+2026-10-13 00:54:10,822  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 00:54:10] "GET /api/job/83f856a9-3513-43dd-91f8-1a01d1f21b37/details HTTP/1.1" 404 -
+2026-10-13 00:54:29,735  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 00:54:29] "GET /dashboard?job=42116440-0e6c-4ca3-ba54-834addaed4b4 HTTP/1.1" 200 -
+2026-10-13 00:54:29,914  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 00:54:29] "GET /api/job/42116440-0e6c-4ca3-ba54-834addaed4b4/details HTTP/1.1" 404 -
+2026-10-13 11:28:57,981  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 11:28:57] "GET /search HTTP/1.1" 200 -
+2026-10-13 11:29:18,427  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 11:29:18] "GET /dashboard?job=42116440-0e6c-4ca3-ba54-834addaed4b4 HTTP/1.1" 200 -
+2026-10-13 11:29:18,775  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 11:29:18] "GET /api/job/42116440-0e6c-4ca3-ba54-834addaed4b4/details HTTP/1.1" 404 -
+2026-10-13 11:29:24,605  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 11:29:24] "GET /dashboard?job=42116440-0e6c-4ca3-ba54-834addaed4b4 HTTP/1.1" 200 -
+2026-10-13 11:29:24,759  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 11:29:24] "GET /api/job/42116440-0e6c-4ca3-ba54-834addaed4b4/details HTTP/1.1" 404 -
+2026-10-13 11:30:01,027  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 11:30:01] "GET /dashboard?job=83f856a9-3513-43dd-91f8-1a01d1f21b37 HTTP/1.1" 200 -
+2026-10-13 11:30:01,255  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 11:30:01] "GET /api/job/83f856a9-3513-43dd-91f8-1a01d1f21b37/details HTTP/1.1" 404 -
+2026-10-13 11:30:34,467  INFO     werkzeug — WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.1.2:8080
+2026-10-13 11:30:34,470  INFO     werkzeug — Press CTRL+C to quit
+2026-10-13 11:30:41,448  INFO     werkzeug — WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.2:5000
+2026-10-13 11:30:41,448  INFO     werkzeug — Press CTRL+C to quit
+2026-10-13 11:30:53,092  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 11:30:53] "GET / HTTP/1.1" 200 -
+2026-10-13 11:31:34,678  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 11:31:34] "GET /dashboard?job=83f856a9-3513-43dd-91f8-1a01d1f21b37 HTTP/1.1" 200 -
+2026-10-13 11:33:27,642  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 11:33:27] "GET /dashboard?job=42116440-0e6c-4ca3-ba54-834addaed4b4 HTTP/1.1" 200 -
+2026-10-13 11:34:29,358  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 11:34:29] "GET /dashboard?job=1c79c9c5-483f-45f6-95eb-901db5026e6f HTTP/1.1" 200 -
+2026-10-13 12:00:08,588  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 12:00:08] "GET /dashboard?job=4d014151-ef5b-401d-9982-19046712c5d0 HTTP/1.1" 200 -
+2026-10-13 12:04:49,496  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 12:04:49] "GET /dashboard?job=4d014151-ef5b-401d-9982-19046712c5d0 HTTP/1.1" 200 -
+2026-10-13 12:05:16,191  INFO     werkzeug — WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.1.2:8080
+2026-10-13 12:05:16,192  INFO     werkzeug — Press CTRL+C to quit
+2026-10-13 12:05:17,149  INFO     werkzeug — WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.2:5000
+2026-10-13 12:05:17,149  INFO     werkzeug — Press CTRL+C to quit
+2026-10-13 12:05:20,613  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 12:05:20] "GET / HTTP/1.1" 200 -
+2026-10-13 12:05:56,266  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 12:05:56] "GET /dashboard?job=4d014151-ef5b-401d-9982-19046712c5d0 HTTP/1.1" 200 -
+2026-10-13 12:12:34,589  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 12:12:34] "GET /dashboard?job=1c79c9c5-483f-45f6-95eb-901db5026e6f HTTP/1.1" 200 -
+2026-10-13 12:14:10,150  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 12:14:10] "GET /dashboard?job=8ff5bc5e-e96b-411e-9117-c5387967ff06 HTTP/1.1" 200 -
+2026-10-13 12:14:34,827  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 12:14:34] "GET /dashboard?job=83f856a9-3513-43dd-91f8-1a01d1f21b37 HTTP/1.1" 200 -
+2026-10-13 12:15:21,737  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 12:15:21] "GET /dashboard?job=332e5f3f-a2ec-4202-9178-472628b90d7c HTTP/1.1" 200 -
+2026-10-13 12:15:43,064  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 12:15:43] "GET /dashboard?job=42116440-0e6c-4ca3-ba54-834addaed4b4 HTTP/1.1" 200 -
+2026-10-13 12:16:27,950  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 12:16:27] "GET /dashboard?job=bcae17cd-abe8-4250-aded-5a2e1afb31d6 HTTP/1.1" 200 -
+2026-10-13 12:16:28,145  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 12:16:28] "GET /api/job/bcae17cd-abe8-4250-aded-5a2e1afb31d6/details HTTP/1.1" 404 -
+2026-10-13 12:16:45,306  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 12:16:45] "GET /dashboard?job=cd351a7f-786d-49ff-99bd-86b5300ef34e HTTP/1.1" 200 -
+2026-10-13 12:17:27,854  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 12:17:27] "GET /dashboard?job=f601848e-1ad5-481b-818f-f98dcfbd4f38 HTTP/1.1" 200 -
+2026-10-13 12:17:42,444  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 12:17:42] "GET /dashboard?job=fae09630-9306-4f76-91b1-75f24a0af7fb HTTP/1.1" 200 -

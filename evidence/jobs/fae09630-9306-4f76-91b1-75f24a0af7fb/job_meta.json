@@ -1,0 +1,18 @@
+{
+  "status": "done",
+  "outcome": "success",
+  "success": true,
+  "outputs": {
+    "balance": 4521.0,
+    "account_status": "Active",
+    "member_name": "Alice Johnson"
+  },
+  "business_outcome": null,
+  "error": null,
+  "duration": 83.09,
+  "steps": 3,
+  "capability": "check_member_balance",
+  "reply": "\u2705 **Alice Johnson**\n\u2022 Balance: **$4,521.00**\n\u2022 Status: **Active**",
+  "job_dir": "C:\\Documents\\vs code\\Interface AI\\interface-ai\\src\\..\\evidence\\jobs\\fae09630-9306-4f76-91b1-75f24a0af7fb",
+  "_reconstructed": true
+}

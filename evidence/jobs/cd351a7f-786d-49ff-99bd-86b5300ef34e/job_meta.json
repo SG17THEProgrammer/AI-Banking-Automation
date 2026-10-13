@@ -1,0 +1,18 @@
+{
+  "status": "done",
+  "outcome": "success",
+  "success": true,
+  "outputs": {
+    "balance": 750.25,
+    "account_status": "Active",
+    "member_name": "Carol Williams"
+  },
+  "business_outcome": null,
+  "error": null,
+  "duration": 6.63,
+  "steps": 4,
+  "capability": "check_member_balance",
+  "reply": "\u2705 **Carol Williams**\n\u2022 Balance: **$750.25**\n\u2022 Status: **Active**",
+  "job_dir": "C:\\Documents\\vs code\\Interface AI\\interface-ai\\src\\..\\evidence\\jobs\\cd351a7f-786d-49ff-99bd-86b5300ef34e",
+  "_reconstructed": true
+}
