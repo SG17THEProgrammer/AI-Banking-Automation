@@ -279,8 +279,7 @@ Open `http://localhost:5000` after running `python main.py`.
 | `Close Eva's account`                          | ✅ Eva Chen → Closed                                         |
 | `Freeze Carol's account` (when already Frozen) | ⚠️ Warning: account already Frozen, no change made           |
 | `hello` / unrecognised input                   | Clarification prompt listing what the bot can do              |
-| `Test HITL demo`                               | ✅ Will start the automation -> gets error -> ask for HITL -> |
-                                                 |     Human resolves it -> Successfully get the output           |
+| `Test HITL demo`                               | ✅ Will start the automation -> gets stuck / gives error -> ask for human intervention  -> Human resolves it -> Successfully gets the output       |
 
 For each completed request the chat bubble shows `Xs · N steps` and a **🔍 View run details** button.
 
