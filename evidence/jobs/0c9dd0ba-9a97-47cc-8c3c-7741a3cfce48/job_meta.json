@@ -1,0 +1,15 @@
+{
+  "status": "done",
+  "outcome": "success",
+  "success": true,
+  "outputs": {
+    "balance": 4521.0,
+    "account_status": "Active",
+    "member_name": "Alice Johnson"
+  },
+  "error": null,
+  "duration": 83.48,
+  "steps": 4,
+  "reply": "\u2705 **Alice Johnson**\n\u2022 Balance: **$4,521.00**\n\u2022 Status: **Active**",
+  "job_dir": "C:\\Documents\\vs code\\Interface AI\\interface-ai\\src\\..\\evidence\\jobs\\0c9dd0ba-9a97-47cc-8c3c-7741a3cfce48"
+}

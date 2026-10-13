@@ -279,7 +279,8 @@ Open `http://localhost:5000` after running `python main.py`.
 | `Close Eva's account`                          | ✅ Eva Chen → Closed                                         |
 | `Freeze Carol's account` (when already Frozen) | ⚠️ Warning: account already Frozen, no change made           |
 | `hello` / unrecognised input                   | Clarification prompt listing what the bot can do              |
-| `Test HITL demo`                               | ✅ Will start the automation -> gets stuck / gives error -> ask for human intervention  -> Human resolves it -> Successfully gets the output       |
+| `Test HITL demo - Human resolves`              | ✅ Automation starts and retrieves Alice Johnson's balance (configured internally through code) -> gets stuck -> gives error -> ask for human intervention  -> Human resolves the issue -> Successfully gets the balance       |
+| `Test HITL demo - Human does not resolves`     | ✖️ Automation starts and retrieves Alice Johnson's balance (configured internally through code) -> gets stuck -> gives error -> ask for human intervention  -> Human does not resolves the issue -> Automation fails or times out and returns an appropriate error message.                                              |
 
 For each completed request the chat bubble shows `Xs · N steps` and a **🔍 View run details** button.
 

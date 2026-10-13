@@ -44,31 +44,31 @@ class ReplayResult:
     def to_dict(self) -> dict:
         return asdict(self)
 
-def _resolve_resume_url(url_after: str, parameters: dict, artifact) -> str:
-    """
-    After a human resolves a HITL intervention, figure out what URL
-    Playwright's headless page should navigate to so extraction works.
+# def _resolve_resume_url(url_after: str, parameters: dict, artifact) -> str:
+#     """
+#     After a human resolves a HITL intervention, figure out what URL
+#     Playwright's headless page should navigate to so extraction works.
 
-    Priority:
-    1. If url_after contains /member/ already — use it directly
-    2. If we have member_id in parameters — build the member detail URL
-    3. Fall back to url_after as-is
-    """
-    import urllib.parse
+#     Priority:
+#     1. If url_after contains /member/ already — use it directly
+#     2. If we have member_id in parameters — build the member detail URL
+#     3. Fall back to url_after as-is
+#     """
+#     import urllib.parse
 
-    # If the user ended up on a member detail page, use it
-    if url_after and "/member/" in url_after and "/update" not in url_after:
-        return url_after
+#     # If the user ended up on a member detail page, use it
+#     if url_after and "/member/" in url_after and "/update" not in url_after:
+#         return url_after
 
-    # Try to construct from member_id parameter
-    member_id = parameters.get("member_id", "")
-    if member_id and artifact.target_url:
-        # target_url is like http://localhost:8080/search — strip the path
-        parsed   = urllib.parse.urlparse(artifact.target_url)
-        base_url = f"{parsed.scheme}://{parsed.netloc}"
-        return f"{base_url}/member/{member_id}"
+#     # Try to construct from member_id parameter
+#     member_id = parameters.get("member_id", "")
+#     if member_id and artifact.target_url:
+#         # target_url is like http://localhost:8080/search — strip the path
+#         parsed   = urllib.parse.urlparse(artifact.target_url)
+#         base_url = f"{parsed.scheme}://{parsed.netloc}"
+#         return f"{base_url}/member/{member_id}"
 
-    return url_after
+#     return url_after
 
 class ReplayEngine:
     def __init__(
@@ -238,42 +238,50 @@ class ReplayEngine:
                             url_after = hitl_result.get("url_after", "")
                             log({"event": "hitl_resolved", "step_id": step.step_id,
                                  "url_after": url_after})
-                            # Navigate Playwright's page to where the user ended up.
-                            # The user resolved the issue in their own browser, so
-                            # Playwright's headless page is still on the old URL.
-                            # We ask the user (via the notes field) where they landed,
-                            # but we can also just navigate to the member page directly
-                            # by reading the member_id from parameters.
-                            try:
-                                target = _resolve_resume_url(
-                                    url_after, parameters, artifact)
-                                if target and target != page.url:
-                                    logger.info(
-                                        f"[engine] Navigating to resolved URL: {target}")
-                                    page.goto(
-                                        target, wait_until="domcontentloaded", timeout=15000)
-                                    page.wait_for_timeout(1000)
-                            except Exception as nav_err:
-                                logger.warning(
-                                    f"[engine] Could not navigate after HITL: {nav_err}")
-                            steps_completed += 1
-                            continue
 
-                        self._save_log(run_log, log_suffix, run_dir)
-                        browser.close()
-                        return ReplayResult(
-                            outcome_type="hard_failure", success=False, outputs={},
-                            error=step_result.get("error"),
-                            failed_step_id=step.step_id,
-                            expected_state=step.description,
-                            observed_state=f"Error: {step_result.get('error')}",
-                            screenshot_path=screenshot_path,
-                            steps_completed=steps_completed,
-                            duration_seconds=time.time() - start,
-                            log_entries=run_log,
-                            retries_used=retries_used,
-                        )
+                            # Re-attempt the SAME step now that the human has
+                            # (supposedly) fixed the page state. Do NOT construct
+                            # a URL from parameters — that bypasses the human fix
+                            # entirely and causes false successes.
+                            retry_result = execute_step(
+                                page, step, parameters, self.guardrails)
 
+                            if retry_result.get("success"):
+                                # Human genuinely fixed it — carry on
+                                log({"event": "hitl_step_retry_success",
+                                     "step_id": step.step_id})
+                                steps_completed += 1
+                                continue
+
+                            # Step still fails after human said they fixed it
+                            log({"event": "hitl_step_retry_failed",
+                                 "step_id": step.step_id,
+                                 "error": retry_result.get("error")})
+                            screenshot_path = self._screenshot(
+                                page, f"hitl_retry_failed_{step.step_id}", run_dir,
+                                step_id=step.step_id,
+                                reason=f"Still failed after HITL: {retry_result.get('error','')}",
+                            )
+                            self._save_log(run_log, log_suffix, run_dir)
+                            browser.close()
+                            return ReplayResult(
+                                outcome_type="hard_failure",
+                                success=False,
+                                outputs={},
+                                error=(
+                                    f"Step '{step.step_id}' still failed after human "
+                                    f"intervention. Check again if you are on the correct page. Error: {retry_result.get('error','')}"
+                                ),
+                                failed_step_id=step.step_id,
+                                expected_state=step.description,
+                                observed_state=f"Post-HITL retry error: {retry_result.get('error','')}",
+                                screenshot_path=screenshot_path,
+                                steps_completed=steps_completed,
+                                duration_seconds=time.time() - start,
+                                log_entries=run_log,
+                                retries_used=retries_used,
+                            )
+                        
                     steps_completed += 1
 
                 log({"event": "extracting_outputs"})

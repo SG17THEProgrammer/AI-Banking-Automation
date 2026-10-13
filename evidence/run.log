@@ -1477,3 +1477,79 @@ Call log:
 2026-10-13 12:16:45,306  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 12:16:45] "GET /dashboard?job=cd351a7f-786d-49ff-99bd-86b5300ef34e HTTP/1.1" 200 -
 2026-10-13 12:17:27,854  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 12:17:27] "GET /dashboard?job=f601848e-1ad5-481b-818f-f98dcfbd4f38 HTTP/1.1" 200 -
 2026-10-13 12:17:42,444  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 12:17:42] "GET /dashboard?job=fae09630-9306-4f76-91b1-75f24a0af7fb HTTP/1.1" 200 -
+2026-10-13 12:53:00,616  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 12:53:00] "POST /api/chat HTTP/1.1" 200 -
+2026-10-13 12:53:07,217  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 12:53:07] "GET /search HTTP/1.1" 200 -
+2026-10-13 12:53:18,901  WARNING  engine.executor — [executor] Step s3_click_search failed: All 2 locator(s) exhausted. Last error: Locator.wait_for: Timeout 5000ms exceeded.
+Call log:
+  - waiting for get_by_label("__hitl_demo_broken_fallback__").first to be visible
+
+2026-10-13 12:53:29,943  WARNING  engine.executor — [executor] Step s3_click_search failed: All 2 locator(s) exhausted. Last error: Locator.wait_for: Timeout 5000ms exceeded.
+Call log:
+  - waiting for get_by_label("__hitl_demo_broken_fallback__").first to be visible
+
+2026-10-13 12:53:30,699  WARNING  hitl.controller — [hitl] Intervention HITL_20261013_072330_001 saved
+2026-10-13 12:53:30,705  WARNING  hitl.controller — [hitl] Waiting for browser resolution of HITL_20261013_072330_001
+2026-10-13 12:57:30,712  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 12:57:30] "GET /search HTTP/1.1" 200 -
+2026-10-13 13:01:03,467  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 13:01:03] "GET /member/100001 HTTP/1.1" 200 -
+2026-10-13 13:02:35,979  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 13:02:35] "POST /api/chat HTTP/1.1" 200 -
+2026-10-13 13:02:38,423  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 13:02:38] "GET /search HTTP/1.1" 200 -
+2026-10-13 13:02:50,207  WARNING  engine.executor — [executor] Step s3_click_search failed: All 2 locator(s) exhausted. Last error: Locator.wait_for: Timeout 5000ms exceeded.
+Call log:
+  - waiting for get_by_label("__hitl_demo_broken_fallback__").first to be visible
+
+2026-10-13 13:03:01,270  WARNING  engine.executor — [executor] Step s3_click_search failed: All 2 locator(s) exhausted. Last error: Locator.wait_for: Timeout 5000ms exceeded.
+Call log:
+  - waiting for get_by_label("__hitl_demo_broken_fallback__").first to be visible
+
+2026-10-13 13:03:01,861  WARNING  hitl.controller — [hitl] Intervention HITL_20261013_073301_001 saved
+2026-10-13 13:03:01,872  WARNING  hitl.controller — [hitl] Waiting for browser resolution of HITL_20261013_073301_001
+2026-10-13 13:03:31,145  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 13:03:31] "GET /member/100001 HTTP/1.1" 200 -
+2026-10-13 13:03:57,262  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 13:03:57] "POST /api/job/0c9dd0ba-9a97-47cc-8c3c-7741a3cfce48/resolve HTTP/1.1" 200 -
+2026-10-13 13:03:57,599  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 13:03:57] "GET /member/100001 HTTP/1.1" 200 -
+2026-10-13 13:26:27,857  INFO     werkzeug — WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.1.2:8080
+2026-10-13 13:26:27,857  INFO     werkzeug — Press CTRL+C to quit
+2026-10-13 13:26:29,496  INFO     werkzeug — WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.2:5000
+2026-10-13 13:26:29,499  INFO     werkzeug — Press CTRL+C to quit
+2026-10-13 13:26:34,501  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 13:26:34] "GET / HTTP/1.1" 200 -
+2026-10-13 13:27:18,772  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 13:27:18] "GET /dashboard?job=0c9dd0ba-9a97-47cc-8c3c-7741a3cfce48 HTTP/1.1" 200 -
+2026-10-13 16:53:20,189  INFO     werkzeug — WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://192.168.1.2:8080
+2026-10-13 16:53:20,194  INFO     werkzeug — Press CTRL+C to quit
+2026-10-13 16:53:20,944  INFO     werkzeug — WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.2:5000
+2026-10-13 16:53:20,944  INFO     werkzeug — Press CTRL+C to quit
+2026-10-13 16:53:24,546  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 16:53:24] "GET / HTTP/1.1" 200 -
+2026-10-13 16:53:57,158  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 16:53:57] "POST /api/chat HTTP/1.1" 200 -
+2026-10-13 16:54:05,919  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 16:54:05] "GET /search HTTP/1.1" 200 -
+2026-10-13 16:54:17,700  WARNING  engine.executor — [executor] Step s3_click_search failed: All 2 locator(s) exhausted. Last error: Locator.wait_for: Timeout 5000ms exceeded.
+Call log:
+  - waiting for get_by_label("__hitl_demo_broken_fallback__").first to be visible
+
+2026-10-13 16:54:28,778  WARNING  engine.executor — [executor] Step s3_click_search failed: All 2 locator(s) exhausted. Last error: Locator.wait_for: Timeout 5000ms exceeded.
+Call log:
+  - waiting for get_by_label("__hitl_demo_broken_fallback__").first to be visible
+
+2026-10-13 16:54:30,044  WARNING  hitl.controller — [hitl] Intervention HITL_20261013_112429_001 saved
+2026-10-13 16:54:30,051  WARNING  hitl.controller — [hitl] Waiting for browser resolution of HITL_20261013_112429_001
+2026-10-13 16:55:14,067  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 16:55:14] "POST /api/job/1742fb7c-83dd-481c-a565-b1a864f2821c/resolve HTTP/1.1" 200 -
+2026-10-13 16:55:24,116  WARNING  engine.executor — [executor] Step s3_click_search failed: All 2 locator(s) exhausted. Last error: Locator.wait_for: Timeout 5000ms exceeded.
+Call log:
+  - waiting for get_by_label("__hitl_demo_broken_fallback__").first to be visible
+
+2026-10-13 16:55:48,725  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 16:55:48] "GET /dashboard?job=1742fb7c-83dd-481c-a565-b1a864f2821c HTTP/1.1" 200 -
+2026-10-13 17:51:02,628  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 17:51:02] "GET / HTTP/1.1" 200 -
+2026-10-13 17:51:43,491  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 17:51:43] "GET / HTTP/1.1" 302 -
+2026-10-13 17:51:43,720  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 17:51:43] "GET /search HTTP/1.1" 200 -
+2026-10-13 17:51:54,370  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 17:51:54] "GET / HTTP/1.1" 302 -
+2026-10-13 17:51:54,435  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 17:51:54] "GET /search HTTP/1.1" 200 -
+2026-10-13 17:54:16,107  INFO     werkzeug — 127.0.0.1 - - [13/Oct/2026 17:54:16] "GET /member/100002 HTTP/1.1" 200 -

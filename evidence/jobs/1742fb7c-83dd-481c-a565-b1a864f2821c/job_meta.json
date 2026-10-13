@@ -1,0 +1,11 @@
+{
+  "status": "done",
+  "outcome": "hard_failure",
+  "success": false,
+  "outputs": {},
+  "error": "Step 's3_click_search' still failed after human intervention. Error: All 2 locator(s) exhausted. Last error: Locator.wait_for: Timeout 5000ms exceeded.\nCall log:\n  - waiting for get_by_label(\"__hitl_demo_broken_fallback__\").first to be visible\n",
+  "duration": 87.34,
+  "steps": 2,
+  "reply": "\u274c Automation failed at step `s3_click_search`.\nStep 's3_click_search' still failed after human intervention. Error: All 2 locator(s) exhausted. Last error: Locator.wait_for: Timeout 5000ms exceeded.\nCall log:\n  - waiting for get_by_label(\"__hitl_demo_broken_fallback__\").first to be visible\n",
+  "job_dir": "C:\\Documents\\vs code\\Interface AI\\interface-ai\\src\\..\\evidence\\jobs\\1742fb7c-83dd-481c-a565-b1a864f2821c"
+}
