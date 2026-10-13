@@ -1,7 +1,7 @@
-# MemberLink Automation System
+# AI Banking Automation System
 ### Computer-Use Automation — Record Once, Replay Deterministically
 
-A prototype for reliable computer-use automation in legacy banking-style applications that lack modern APIs.
+A working prototype for reliable computer-use automation in legacy banking-style applications that lack modern APIs.
 
 Users submit natural-language requests through a chat interface. An LLM-powered discovery agent can explore a workflow and produce a reusable capability artifact; a deterministic Playwright engine then executes supported workflows without an LLM call during replay. When automation gets stuck, a Human-in-the-Loop (HITL) flow allows intervention and recovery.
 
@@ -39,6 +39,8 @@ The system has four layers that execute in strict sequence:
 
 Both are exercised via a natural-language chat UI at `http://localhost:5000`.
 
+Note: The suggestions are provided in the Chat UI itself. Follow those and see the magic of it ✨. 
+
 ---
 
 ## Project Structure
@@ -75,7 +77,7 @@ AI-Banking-Automation/
 │   ├── chat_app.py                ← Flask chat server (port 5000), dashboard, job API
 │   └── templates/
 │       ├── chat.html              ← Real-time chat UI with live step progress + HITL banners
-│       └── dashboard.html         ← Run evidence dashboard (auto-load by job ID or manual upload)
+│       └── dashboard.html         ← Run evidence dashboard (auto-load by job ID)
 │
 ├── discovery.py                   ← LLM Discovery Agent (Groq backend, tool-use loop)
 │
@@ -93,11 +95,12 @@ evidence/                          ← All run evidence (auto-generated)
 ├── discovery_run.log              ← LLM discovery trace (NDJSON)
 ├── run.log                        ← Logs all the runs that are seen in terminal
 └── jobs/                          ← Per-chat-message evidence bundles
-└── {job_id}/
-├── replay_run.log                 ← Per-run replay traces 
-├── screenshots/                   ← Browser screenshots (annotated on failure)
-└── interventions/                 ← HITL escalation records
-└── dashboard.html                 ← Easy Visualization
+|   └── {job_id}/
+|        ├── replay_run.log                 ← Per-run replay traces (Fallback if job_meta.json is not present) 
+|        ├── screenshots/                   ← Browser screenshots (annotated on failure)
+|        └── interventions/                 ← HITL escalation records
+|        └── job_meta.json                  ← Cached data of the run
+└── dashboard.html                 ← Easy Visualization (Manual Upload)
 
 ````
 
@@ -106,7 +109,7 @@ evidence/                          ← All run evidence (auto-generated)
 ## Prerequisites
 
 - Python 3.10+
-- A [Groq](https://console.groq.com) API key (free tier is sufficient — one discovery run costs pennies)
+- A [Groq](https://console.groq.com) API key (free tier is sufficient — one discovery ; one run)
 - Chromium (installed via Playwright)
 
 ---
@@ -183,7 +186,7 @@ Replay the saved artifact for a specific member:
 cd src
 python main.py --mode replay --member 100001
 python main.py --mode replay --member 100002
-python main.py --mode replay --member 000000   # triggers business outcome (not found)
+python main.py --mode replay --member 000000   # triggers business outcome not failure (not found)
 
 ```
 
@@ -205,7 +208,8 @@ Scenarios: balance lookup (success), balance lookup (not found / business outcom
 
 ### Mode 5 — HITL Escalation Demo
 
-Injects deliberately broken locators to force an escalation, then demonstrates the full human-takeover-and-resume flow:
+Two ways:
+1. Injects deliberately broken locators to force an escalation, then demonstrates the full human-takeover-and-resume flow:
 
 ```bash
 # Auto-resolve mode (headless, no browser window needed)
@@ -217,6 +221,8 @@ cd src
 python main.py --mode hitl-test
 
 ```
+
+2. Has a option in the Chat UI itself to test HITL feature. Just click on it and see it working.
 
 Interactive mode:
 
@@ -261,18 +267,20 @@ The dashboard shows: step timeline with durations, extracted outputs, HITL inter
 
 Open `http://localhost:5000` after running `python main.py`.
 
-| What you type                                  |  Expected result                                            |
-| ---------------------------------------------- | ----------------------------------------------------------- |
+| What you type                                  |  Expected result                                             |
+| ---------------------------------------------- | -----------------------------------------------------------  |
 | `What is Alice's balance?`                     | ✅ Alice Johnson — Balance: $4,521.00, Status: Active        |
 | `Check member 100002`                          | ✅ Bob Martinez — Balance: $12,340.50, Status: Active        |
 | `What is Carol's status?`                      | ✅ Carol Williams — Balance: $750.25, Status: Frozen         |
 | `What is David's balance?`                     | ✅ David Lee — Balance: $88,000.00, Status: Active           |
-| `Check member 000000`                          | ⚑ Business outcome: "No record found for Member ID: 000000" |
+| `Check member 000000`                          | ⚑ Business outcome: "No record found for Member ID: 000000"  |
 | `Freeze Carol's account`                       | ✅ Carol Williams → Frozen (with modal confirmation)         |
 | `Reactivate account 100003`                    | ✅ Carol Williams → Active                                   |
 | `Close Eva's account`                          | ✅ Eva Chen → Closed                                         |
-| `Freeze Carol's account` (when already Frozen) | ⚠️ Warning: account already Frozen, no change made          |
-| `hello` / unrecognised input                   | Clarification prompt listing what the bot can do            |
+| `Freeze Carol's account` (when already Frozen) | ⚠️ Warning: account already Frozen, no change made           |
+| `hello` / unrecognised input                   | Clarification prompt listing what the bot can do              |
+| `Test HITL demo`                               | ✅ Will start the automation -> gets error -> ask for HITL -> |
+                                                 |     Human resolves it -> Successfully get the output           |
 
 For each completed request the chat bubble shows `Xs · N steps` and a **🔍 View run details** button.
 
@@ -343,15 +351,9 @@ Check `evidence/interventions/` for the JSON record and `evidence/screenshots/` 
 After running the system, `evidence/` contains:
 
 | `capability_artifact.json`      | The saved artifact from the discovery run — the core data contract
-| `discovery_run.log`             | NDJSON trace of the LLM agent's Observe→Decide→Act loop           
-| `replay_success.log`            | NDJSON trace of a successful deterministic replay                 
-| `replay_success_summary.json`   | Structured `ReplayResult` for the success case                    
-| `replay_failure_summary.json`   | Business outcome result (member 000000 not found)                 
-| `replay_hitl_test.log`          | Replay trace showing HITL escalation and resume                   
-| `replay_hitl_test_summary.json` | Result after human intervention                                   
-| `replay_business_outcome.log`   | Replay trace for an invalid member ID                             
+| `discovery_run.log`             | NDJSON trace of the LLM agent's Observe→Decide→Act loop
+| `run.log`                       | Complete log of all steps taken till the last request    
 | `screenshots/`                  | Browser SS: `discovery_final.png`, `replay_final.png`, `failure_*.png`, `HITL_*_annotated.png`
-| `interventions/`                | JSON records of each HITL escalation with step, reason, URL, human notes
 | `jobs/{job_id}/`                | Per-chat-message evidence bundles (log + screenshots + interventions)   
 
 ---
